@@ -1,0 +1,327 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated customer profile, preferences, and loyalty balance.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Firebase Auth UID of the user." },
+        "displayName": { "type": "string", "description": "Customer display name." },
+        "email": { "type": "string", "description": "Verified account email." },
+        "loyaltyPoints": { "type": "integer", "description": "Accumulated loyalty reward points." },
+        "referralCode": { "type": "string", "description": "Unique customer referral code." },
+        "preferredCountry": { "type": "string", "description": "ISO country code (SA, AE, BD, US, GB, EU)." },
+        "preferredCurrency": { "type": "string", "description": "Currency code (SAR, USD, BDT, AED, EUR, GBP)." },
+        "preferredLanguage": { "type": "string", "description": "Language code (en, ar, bn)." },
+        "darkMode": { "type": "boolean", "description": "Whether dark mode is preferred." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server creation timestamp via FieldValue.serverTimestamp()." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server update timestamp via FieldValue.serverTimestamp()." }
+      },
+      "required": ["userId", "displayName", "loyaltyPoints", "preferredCountry", "preferredCurrency", "preferredLanguage", "darkMode", "createdAt", "updatedAt"]
+    },
+    "Address": {
+      "title": "Address",
+      "description": "Customer international shipping address.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Owner Firebase Auth UID." },
+        "label": { "type": "string", "description": "Address label such as Home or Office." },
+        "recipientName": { "type": "string", "description": "Recipient full name." },
+        "phone": { "type": "string", "description": "Contact phone number." },
+        "countryCode": { "type": "string", "description": "ISO country code." },
+        "city": { "type": "string", "description": "City name." },
+        "streetLine": { "type": "string", "description": "Street, building, and district." },
+        "postalCode": { "type": "string", "description": "Postal or ZIP code." },
+        "defaultAddress": { "type": "boolean", "description": "Whether this is the default shipping address." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server creation timestamp." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server update timestamp." }
+      },
+      "required": ["userId", "label", "recipientName", "phone", "countryCode", "city", "streetLine", "defaultAddress", "createdAt", "updatedAt"]
+    },
+    "CartItem": {
+      "title": "CartItem",
+      "description": "Shopping cart item belonging to a user with selected variation.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Owner Firebase Auth UID." },
+        "productId": { "type": "string", "description": "Product identifier." },
+        "productTitle": { "type": "string", "description": "Product title snapshot." },
+        "sellerId": { "type": "string", "description": "Seller store ID." },
+        "sellerName": { "type": "string", "description": "Seller display name." },
+        "official": { "type": "boolean", "description": "True if sold by X-SHOPPING Official Store." },
+        "unitPriceUsd": { "type": "number", "description": "Unit base price in USD." },
+        "discountPercent": { "type": "integer", "description": "Discount percentage 0-90." },
+        "quantity": { "type": "integer", "description": "Item quantity >= 1." },
+        "selectedSize": { "type": "string", "description": "Selected size variation." },
+        "selectedColor": { "type": "string", "description": "Selected color variation." },
+        "selectedModel": { "type": "string", "description": "Selected model variation." },
+        "imageKey": { "type": "string", "description": "Product visual identifier." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server creation timestamp." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server update timestamp." }
+      },
+      "required": ["userId", "productId", "productTitle", "sellerId", "sellerName", "official", "unitPriceUsd", "discountPercent", "quantity", "imageKey", "createdAt", "updatedAt"]
+    },
+    "WishlistItem": {
+      "title": "WishlistItem",
+      "description": "User saved wishlist product reference.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Owner Firebase Auth UID." },
+        "productId": { "type": "string", "description": "Product ID." },
+        "productTitle": { "type": "string", "description": "Product title." },
+        "unitPriceUsd": { "type": "number", "description": "Base USD price." },
+        "imageKey": { "type": "string", "description": "Visual key." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server creation timestamp." }
+      },
+      "required": ["userId", "productId", "productTitle", "unitPriceUsd", "imageKey", "createdAt"]
+    },
+    "RecentlyViewedItem": {
+      "title": "RecentlyViewedItem",
+      "description": "Recently viewed product entry for a customer.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Owner Firebase Auth UID." },
+        "productId": { "type": "string", "description": "Product ID." },
+        "viewedAt": { "type": "string", "format": "date-time", "description": "Server view timestamp." }
+      },
+      "required": ["userId", "productId", "viewedAt"]
+    },
+    "SellerStore": {
+      "title": "SellerStore",
+      "description": "Public multi-vendor seller store profile.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string", "description": "Seller Firebase Auth UID." },
+        "storeName": { "type": "string", "description": "Storefront name." },
+        "storeDescription": { "type": "string", "description": "Store bio and specialization." },
+        "sellerType": { "type": "string", "enum": ["INDIVIDUAL", "BUSINESS", "OFFICIAL"], "description": "Seller tier." },
+        "official": { "type": "boolean", "description": "Whether this is the official X-SHOPPING store." },
+        "status": { "type": "string", "enum": ["PENDING", "APPROVED", "SUSPENDED"], "description": "Approval state." },
+        "countryCode": { "type": "string", "description": "Primary country of operation." },
+        "rating": { "type": "number", "description": "Average store rating." },
+        "totalSalesUsd": { "type": "number", "description": "Cumulative store sales in USD." },
+        "commissionRate": { "type": "number", "description": "Platform commission rate (0.0 to 0.5)." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server creation timestamp." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server update timestamp." }
+      },
+      "required": ["ownerId", "storeName", "storeDescription", "sellerType", "official", "status", "countryCode", "rating", "totalSalesUsd", "commissionRate", "createdAt", "updatedAt"]
+    },
+    "SellerPrivateKyc": {
+      "title": "SellerPrivateKyc",
+      "description": "Isolated private seller verification & payout details.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string", "description": "Seller Firebase Auth UID." },
+        "businessRegNo": { "type": "string", "description": "Commercial registration or national ID reference." },
+        "ibanLast4": { "type": "string", "description": "Last 4 digits of bank settlement account." },
+        "contactEmail": { "type": "string", "description": "Seller business email." },
+        "contactPhone": { "type": "string", "description": "Seller business phone." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server update timestamp." }
+      },
+      "required": ["ownerId", "businessRegNo", "ibanLast4", "contactEmail", "contactPhone", "updatedAt"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Marketplace product listing from Official Store or 3rd-party sellers.",
+      "type": "object",
+      "properties": {
+        "sellerId": { "type": "string", "description": "Seller UID or official_xshopping." },
+        "sellerName": { "type": "string", "description": "Display name of the store." },
+        "official": { "type": "boolean", "description": "Official X-SHOPPING store badge." },
+        "approvalStatus": { "type": "string", "enum": ["PENDING", "APPROVED", "REJECTED"], "description": "Admin moderation status." },
+        "title": { "type": "string", "description": "Product title." },
+        "description": { "type": "string", "description": "Full product description." },
+        "category": { "type": "string", "description": "Top-level category." },
+        "subCategory": { "type": "string", "description": "Subcategory." },
+        "brand": { "type": "string", "description": "Product brand." },
+        "priceUsd": { "type": "number", "description": "Base price in USD." },
+        "discountPercent": { "type": "integer", "description": "Discount percentage 0-90." },
+        "stock": { "type": "integer", "description": "Available inventory units." },
+        "rating": { "type": "number", "description": "Average rating 0-5." },
+        "reviewCount": { "type": "integer", "description": "Total review count." },
+        "imageKey": { "type": "string", "description": "Product visual identifier." },
+        "sizes": { "type": "array", "description": "Available size options (max 10)." },
+        "colors": { "type": "array", "description": "Available color options (max 10)." },
+        "models": { "type": "array", "description": "Available model options (max 10)." },
+        "availableCountries": { "type": "array", "description": "Supported ISO country codes (max 20)." },
+        "featured": { "type": "boolean", "description": "Featured on home page." },
+        "flashSale": { "type": "boolean", "description": "Included in flash sale." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server creation timestamp." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server update timestamp." }
+      },
+      "required": ["sellerId", "sellerName", "official", "approvalStatus", "title", "description", "category", "subCategory", "brand", "priceUsd", "discountPercent", "stock", "rating", "reviewCount", "imageKey", "sizes", "colors", "models", "availableCountries", "featured", "flashSale", "createdAt", "updatedAt"]
+    },
+    "ProductReview": {
+      "title": "ProductReview",
+      "description": "Customer rating and written review for a product.",
+      "type": "object",
+      "properties": {
+        "productId": { "type": "string", "description": "Target product ID." },
+        "userId": { "type": "string", "description": "Author Firebase Auth UID." },
+        "authorName": { "type": "string", "description": "Author display name." },
+        "rating": { "type": "integer", "description": "Star rating 1-5." },
+        "comment": { "type": "string", "description": "Review text." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server creation timestamp." }
+      },
+      "required": ["productId", "userId", "authorName", "rating", "comment", "createdAt"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Customer marketplace order with international pricing breakdown and status.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Buyer Firebase Auth UID." },
+        "orderNumber": { "type": "string", "description": "Human-readable order code." },
+        "countryCode": { "type": "string", "description": "Destination country code." },
+        "currencyCode": { "type": "string", "description": "Order currency code." },
+        "exchangeRate": { "type": "number", "description": "Exchange rate vs USD." },
+        "subtotalUsd": { "type": "number", "description": "Items subtotal in USD." },
+        "discountUsd": { "type": "number", "description": "Coupon discount in USD." },
+        "shippingUsd": { "type": "number", "description": "Shipping cost in USD." },
+        "taxUsd": { "type": "number", "description": "VAT / Tax + duty in USD." },
+        "totalUsd": { "type": "number", "description": "Final payable total in USD." },
+        "couponCode": { "type": "string", "description": "Applied coupon code if any." },
+        "shippingMethod": { "type": "string", "description": "Courier method (DHL, Aramex, FedEx, X-Express)." },
+        "trackingNumber": { "type": "string", "description": "Shipment tracking code." },
+        "paymentMethod": { "type": "string", "description": "Payment method (Mada, STC Pay, Google Pay, Card, bKash, COD)." },
+        "paymentStatus": { "type": "string", "enum": ["AUTHORIZED", "COD_AUTHORIZED", "REFUND_PENDING", "REFUNDED"], "description": "Verified payment state." },
+        "status": { "type": "string", "enum": ["PENDING", "CONFIRMED", "PROCESSING", "PACKED", "SHIPPED", "OUT_FOR_DELIVERY", "DELIVERED", "CANCELLED", "RETURNED", "REFUND_PENDING", "REFUNDED"], "description": "Fulfillment lifecycle status." },
+        "shippingAddressSummary": { "type": "string", "description": "Formatted destination address." },
+        "itemCount": { "type": "integer", "description": "Total item units." },
+        "itemsSummary": { "type": "string", "description": "Summary of items in order." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server creation timestamp." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server update timestamp." }
+      },
+      "required": ["userId", "orderNumber", "countryCode", "currencyCode", "exchangeRate", "subtotalUsd", "discountUsd", "shippingUsd", "taxUsd", "totalUsd", "shippingMethod", "trackingNumber", "paymentMethod", "paymentStatus", "status", "shippingAddressSummary", "itemCount", "itemsSummary", "createdAt", "updatedAt"]
+    },
+    "SellerSubOrder": {
+      "title": "SellerSubOrder",
+      "description": "Seller-specific fulfillment sub-order linked to a parent customer order.",
+      "type": "object",
+      "properties": {
+        "orderId": { "type": "string", "description": "Parent order ID." },
+        "orderNumber": { "type": "string", "description": "Parent order code." },
+        "buyerId": { "type": "string", "description": "Buyer UID." },
+        "sellerId": { "type": "string", "description": "Seller UID or official_xshopping." },
+        "sellerName": { "type": "string", "description": "Seller store name." },
+        "grossUsd": { "type": "number", "description": "Gross item value in USD." },
+        "commissionUsd": { "type": "number", "description": "Platform commission in USD." },
+        "netUsd": { "type": "number", "description": "Net seller earnings in USD." },
+        "itemCount": { "type": "integer", "description": "Units in this seller sub-order." },
+        "itemsSummary": { "type": "string", "description": "Line items description." },
+        "courierName": { "type": "string", "description": "Assigned courier." },
+        "trackingNumber": { "type": "string", "description": "Sub-order tracking code." },
+        "status": { "type": "string", "enum": ["PENDING", "CONFIRMED", "PROCESSING", "PACKED", "SHIPPED", "OUT_FOR_DELIVERY", "DELIVERED", "CANCELLED", "RETURNED", "REFUND_PENDING", "REFUNDED"], "description": "Fulfillment status." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server creation timestamp." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server update timestamp." }
+      },
+      "required": ["orderId", "orderNumber", "buyerId", "sellerId", "sellerName", "grossUsd", "commissionUsd", "netUsd", "itemCount", "itemsSummary", "courierName", "trackingNumber", "status", "createdAt", "updatedAt"]
+    },
+    "PayoutRequest": {
+      "title": "PayoutRequest",
+      "description": "Seller bank payout withdrawal request.",
+      "type": "object",
+      "properties": {
+        "sellerId": { "type": "string", "description": "Seller Firebase Auth UID." },
+        "storeName": { "type": "string", "description": "Store name." },
+        "amountUsd": { "type": "number", "description": "Requested payout amount in USD." },
+        "status": { "type": "string", "enum": ["PENDING", "PAID", "REJECTED"], "description": "Payout processing state." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server creation timestamp." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server update timestamp." }
+      },
+      "required": ["sellerId", "storeName", "amountUsd", "status", "createdAt", "updatedAt"]
+    },
+    "SupportTicket": {
+      "title": "SupportTicket",
+      "description": "Customer or seller support inquiry.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Submitter Firebase Auth UID." },
+        "subject": { "type": "string", "description": "Ticket subject." },
+        "message": { "type": "string", "description": "Issue details." },
+        "status": { "type": "string", "enum": ["OPEN", "RESOLVED"], "description": "Ticket status." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server creation timestamp." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server update timestamp." }
+      },
+      "required": ["userId", "subject", "message", "status", "createdAt", "updatedAt"]
+    },
+    "GlobalConfig": {
+      "title": "GlobalConfig",
+      "description": "Admin-managed marketplace exchange rates, taxes, and shipping rules.",
+      "type": "object",
+      "properties": {
+        "sarRate": { "type": "number", "description": "SAR per 1 USD." },
+        "aedRate": { "type": "number", "description": "AED per 1 USD." },
+        "bdtRate": { "type": "number", "description": "BDT per 1 USD." },
+        "eurRate": { "type": "number", "description": "EUR per 1 USD." },
+        "gbpRate": { "type": "number", "description": "GBP per 1 USD." },
+        "saVatPercent": { "type": "number", "description": "Saudi Arabia VAT %." },
+        "defaultCommissionPercent": { "type": "number", "description": "Marketplace commission %." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server update timestamp." }
+      },
+      "required": ["sarRate", "aedRate", "bdtRate", "eurRate", "gbpRate", "saVatPercent", "defaultCommissionPercent", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/admins/{adminUid}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Admin role grant documents."
+    },
+    "/global_config/{configId}": {
+      "schema": { "$ref": "#/entities/GlobalConfig" },
+      "description": "Marketplace-wide currency, tax, and commission configuration."
+    },
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Authenticated user profile and localization settings."
+    },
+    "/users/{userId}/addresses/{addressId}": {
+      "schema": { "$ref": "#/entities/Address" },
+      "description": "User saved international shipping addresses."
+    },
+    "/users/{userId}/cart/{cartItemId}": {
+      "schema": { "$ref": "#/entities/CartItem" },
+      "description": "User shopping cart items."
+    },
+    "/users/{userId}/wishlist/{productId}": {
+      "schema": { "$ref": "#/entities/WishlistItem" },
+      "description": "User wishlist items."
+    },
+    "/users/{userId}/recently_viewed/{productId}": {
+      "schema": { "$ref": "#/entities/RecentlyViewedItem" },
+      "description": "User recently viewed product timestamps."
+    },
+    "/sellers/{sellerId}": {
+      "schema": { "$ref": "#/entities/SellerStore" },
+      "description": "Public multi-vendor seller storefronts."
+    },
+    "/sellers/{sellerId}/private/{docId}": {
+      "schema": { "$ref": "#/entities/SellerPrivateKyc" },
+      "description": "Private seller KYC and settlement metadata."
+    },
+    "/products/{productId}": {
+      "schema": { "$ref": "#/entities/Product" },
+      "description": "Global product catalog for Official Store and third-party sellers."
+    },
+    "/products/{productId}/reviews/{reviewId}": {
+      "schema": { "$ref": "#/entities/ProductReview" },
+      "description": "Customer reviews per product."
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/Order" },
+      "description": "Customer placed orders."
+    },
+    "/seller_orders/{subOrderId}": {
+      "schema": { "$ref": "#/entities/SellerSubOrder" },
+      "description": "Seller-scoped fulfillment sub-orders."
+    },
+    "/payouts/{payoutId}": {
+      "schema": { "$ref": "#/entities/PayoutRequest" },
+      "description": "Seller withdrawal requests."
+    },
+    "/support_tickets/{ticketId}": {
+      "schema": { "$ref": "#/entities/SupportTicket" },
+      "description": "Customer and seller support tickets."
+    }
+  }
+}

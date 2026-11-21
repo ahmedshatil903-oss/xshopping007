@@ -1,0 +1,6 @@
+{
+  "name": "X-SHOPPING",
+  "description": "X-SHOPPING — Your Global Shopping Destination. International multi-vendor e-commerce marketplace Android app with Official Store, Seller Center, and Admin Operations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
